@@ -5,17 +5,17 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	postgre_connector "todoapp.com/infrastructure"
-	todoscontroller "todoapp.com/presentation/controllers"
+	"todoapp.com/infrastructure/connectors/postgre"
+	"todoapp.com/presentation/controllers/todos"
 )
 
 func main() {
-	postgre_connector.Connect()
+	postgre.Connect()
 
 	app := fiber.New(fiber.Config{JSONEncoder: json.Marshal, JSONDecoder: json.Unmarshal})
 	api := app.Group("/api", logger.New())
 
-	todoscontroller.SetupTodosController(api)
+	todos.SetupTodosController(api)
 
 	app.Listen(":3000")
 }

@@ -1,4 +1,4 @@
-package postgre_connector
+package postgre
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	todo "todoapp.com/domain/models"
+	"todoapp.com/domain/models/todo"
 )
 
 var DB *gorm.DB
