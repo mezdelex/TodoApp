@@ -1,4 +1,4 @@
-package tododto
+package todo
 
 type TodoDTO struct {
 	ID          string
