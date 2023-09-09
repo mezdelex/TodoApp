@@ -36,13 +36,13 @@ func SetupTodosController(router fiber.Router) {
 
 		if error != nil {
 			return context.Status(400).JSON(fiber.Map{
+				"data":    nil,
 				"message": "The provided Todo could not be parsed.",
 				"status":  "error",
 			})
 		}
 
-		// TODO: implement create service
-		createdTodo, error := todos.CreateTodo(newTodo)
+		createdTodo, error := todos.Create(newTodo)
 		if error != nil {
 			var e *fiber.Error
 			errors.As(error, &e)
