@@ -30,10 +30,26 @@ func Create(t *dto.TodoDTO) (*dto.TodoDTO, error) {
 
 	createdEntity, error := todos.Create(model)
 	if error != nil {
-		return nil, fiber.NewError(500, "There was a conflict saving the Todo.")
+		return nil, error
 	}
 	var createdDTO = new(dto.TodoDTO)
 	createdDTO.From(createdEntity)
 
 	return createdDTO, nil
+}
+
+func Update(t *dto.TodoDTO) (bool, error) {
+	if !t.ValidateUpdate() {
+		return false, fiber.NewError(400, "Invalid Todo.")
+	}
+
+	var model = new(model.Todo)
+	t.To(model)
+
+	isUpdated, error := todos.Update(model)
+	if error != nil {
+		return false, error
+	}
+
+	return isUpdated, nil
 }
