@@ -73,7 +73,7 @@ func SetupTodosController(router fiber.Router) {
 		}
 
 		i, _ := strconv.Atoi(context.Params("id"))
-		if uint(i) != *todoToUpdate.ID {
+		if todoToUpdate.ID == nil || uint(i) != *todoToUpdate.ID {
 			return context.Status(400).JSON(fiber.Map{
 				"data":    nil,
 				"message": "The route id and the Todo's id are not equal.",
