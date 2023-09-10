@@ -48,8 +48,17 @@ func Update(t *dto.TodoDTO) (bool, error) {
 
 	isUpdated, error := todos.Update(model)
 	if error != nil {
-		return false, error
+		return isUpdated, error
 	}
 
 	return isUpdated, nil
+}
+
+func Delete(id uint) (bool, error) {
+	isDeleted, error := todos.Delete(id)
+	if error != nil {
+		return isDeleted, error
+	}
+
+	return isDeleted, nil
 }
