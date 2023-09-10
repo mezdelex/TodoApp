@@ -1,6 +1,7 @@
 package todos
 
 import (
+	"github.com/gofiber/fiber/v2"
 	"todoapp.com/domain/models/todo"
 	"todoapp.com/infrastructure/connectors/postgre"
 )
@@ -14,6 +15,15 @@ func GetAll() *[]todo.Todo {
 	return todos
 }
 
+func Get(id uint) *todo.Todo {
+	db := postgre.DB
+	var todo = new(todo.Todo)
+
+	db.Find(todo, "id = ?", id)
+
+	return todo
+}
+
 func Create(t *todo.Todo) (*todo.Todo, error) {
 	db := postgre.DB
 
@@ -23,4 +33,24 @@ func Create(t *todo.Todo) (*todo.Todo, error) {
 	}
 
 	return t, nil
+}
+
+func Update(t *todo.Todo) (bool, error) {
+	db := postgre.DB
+
+	entity := Get(*t.ID)
+	if entity == nil {
+		return false, fiber.NewError(404, "Couldn't find the requested Todo.")
+	}
+
+	(*entity).Name = (*t).Name
+	(*entity).Description = (*t).Description
+	(*entity).IsCompleted = (*t).IsCompleted
+
+	error := db.Save(entity).Error
+	if error != nil {
+		return false, error
+	}
+
+	return true, nil
 }
