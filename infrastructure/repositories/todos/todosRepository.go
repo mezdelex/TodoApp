@@ -10,7 +10,7 @@ func GetAll() *[]todo.Todo {
 	db := postgre.DB
 	var todos = new([]todo.Todo)
 
-	db.Where("deleted_at is not null").Find(todos)
+	db.Where("deleted_at is null").Find(todos)
 
 	return todos
 }
@@ -19,7 +19,7 @@ func Get(id uint) *todo.Todo {
 	db := postgre.DB
 	var todo = new(todo.Todo)
 
-	db.Where("id = ?", id).Where("deleted_at is not null").Find(todo)
+	db.Where("id = ? and deleted_at is null", id).Find(todo)
 
 	return todo
 }
@@ -59,11 +59,11 @@ func Delete(id uint) (bool, error) {
 	db := postgre.DB
 
 	entity := Get(id)
-	if entity == nil {
+	if (*entity).ID == nil {
 		return false, fiber.NewError(404, "Couldn't find the requested Todo.")
 	}
 
-	error := db.Where("id = ?", id).Delete(entity).Error
+	error := db.Delete(entity, id).Error
 	if error != nil {
 		return false, error
 	}
