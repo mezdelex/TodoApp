@@ -2,12 +2,12 @@ package todos
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"todoapp.com/application/dtos/todo"
 	"todoapp.com/application/services/todos"
+	"todoapp.com/presentation/messages"
 )
 
 func SetupTodosController(router fiber.Router) {
@@ -17,17 +17,17 @@ func SetupTodosController(router fiber.Router) {
 		todoDTOs := todos.GetAll()
 
 		if len(todoDTOs) == 0 {
-			return context.Status(404).JSON(fiber.Map{
+			return context.Status(200).JSON(fiber.Map{
 				"data":    todoDTOs,
-				"message": "No todos left.",
-				"status":  "error",
+				"message": messages.Messages{}.CollectionEmptyMessage("Todo"),
+				"status":  messages.Status{}.Success(),
 			})
 		}
 
 		return context.Status(200).JSON(fiber.Map{
 			"data":    todoDTOs,
-			"message": fmt.Sprintf("Returning %d todo(s).", len(todoDTOs)),
-			"status":  "success",
+			"message": messages.Messages{}.ReturningItemsMessage(len(todoDTOs), "todo"),
+			"status":  messages.Status{}.Success(),
 		})
 	})
 
@@ -36,9 +36,8 @@ func SetupTodosController(router fiber.Router) {
 		error := context.BodyParser(newTodo)
 		if error != nil {
 			return context.Status(400).JSON(fiber.Map{
-				"data":    nil,
-				"message": "The provided Todo could not be parsed.",
-				"status":  "error",
+				"message": messages.Messages{}.ParsingErrorMessage("Todo"),
+				"status":  messages.Status{}.Error(),
 			})
 		}
 
@@ -50,13 +49,13 @@ func SetupTodosController(router fiber.Router) {
 			return context.Status(e.Code).JSON(fiber.Map{
 				"data":    createdTodo,
 				"message": e.Message,
-				"status":  "error",
+				"status":  messages.Status{}.Error(),
 			})
 		}
 
 		return context.Status(201).JSON(fiber.Map{
 			"data":    createdTodo,
-			"message": fmt.Sprintf("%v was created successfully", createdTodo),
+			"message": messages.Messages{}.ItemCreatedMessage(createdTodo),
 			"status":  "success",
 		})
 	})
@@ -66,18 +65,22 @@ func SetupTodosController(router fiber.Router) {
 		error := context.BodyParser(todoToUpdate)
 		if error != nil {
 			return context.Status(400).JSON(fiber.Map{
-				"data":    nil,
-				"message": "The provided Todo could not be parsed.",
-				"status":  "error",
+				"message": messages.Messages{}.ParsingErrorMessage("Todo"),
+				"status":  messages.Status{}.Error(),
 			})
 		}
 
-		i, _ := strconv.Atoi(context.Params("id"))
+		i, error := strconv.Atoi(context.Params("id"))
+		if error != nil {
+			return context.Status(400).JSON(fiber.Map{
+				"message": messages.Messages{}.RouteFormatErrorMessage("id"),
+				"status":  messages.Status{}.Error(),
+			})
+		}
 		if todoToUpdate.ID == nil || uint(i) != *todoToUpdate.ID {
 			return context.Status(400).JSON(fiber.Map{
-				"data":    nil,
-				"message": "The route id and the Todo's id are not equal.",
-				"status":  "error",
+				"message": messages.Messages{}.UpdateIdsConflictMessage("Todo"),
+				"status":  messages.Status{}.Error(),
 			})
 		}
 
@@ -89,14 +92,43 @@ func SetupTodosController(router fiber.Router) {
 			return context.Status(e.Code).JSON(fiber.Map{
 				"data":    todoToUpdate,
 				"message": e.Message,
-				"status":  "error",
+				"status":  messages.Status{}.Error(),
 			})
 		}
 
 		return context.Status(200).JSON(fiber.Map{
 			"data":    isUpdated,
-			"message": "Todo values updated successfully.",
-			"status":  "success",
+			"message": messages.Messages{}.ValuesUpdatedSuccessfullyMessage("Todo"),
+			"status":  messages.Status{}.Success(),
+		})
+	})
+
+	todosRouter.Delete("/:id", func(context *fiber.Ctx) error {
+		i, error := strconv.Atoi(context.Params("id"))
+		if error != nil {
+			return context.Status(400).JSON(fiber.Map{
+				"message": messages.Messages{}.RouteFormatErrorMessage("id"),
+				"status":  messages.Status{}.Error(),
+			})
+		}
+
+		id := uint(i)
+		isDeleted, error := todos.Delete(id)
+		if error != nil {
+			var e *fiber.Error
+			errors.As(error, &e)
+
+			return context.Status(e.Code).JSON(fiber.Map{
+				"data":    isDeleted,
+				"message": e.Message,
+				"status":  messages.Status{}.Error(),
+			})
+		}
+
+		return context.Status(200).JSON(fiber.Map{
+			"data":    isDeleted,
+			"message": messages.Messages{}.ItemDeletedSuccessfullyMessage("Todo", id),
+			"status":  messages.Status{}.Success(),
 		})
 	})
 }
