@@ -9,12 +9,10 @@ import (
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"todoapp.com/domain/models/todo"
+	"todoapp.com/domain/models"
 )
 
-var DB *gorm.DB
-
-func Connect() {
+func Connect() *gorm.DB {
 	var error error
 
 	error = godotenv.Load()
@@ -26,11 +24,12 @@ func Connect() {
 	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		os.Getenv("DB_HOST"), port, os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"))
 
-	DB, error = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, error := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if error != nil {
 		log.Panic("Couldn't connect to the database.")
 	}
-	DB.AutoMigrate(&todo.Todo{})
+	db.AutoMigrate(&models.Todo{})
 
 	fmt.Println("Connected to the DB.")
+	return db
 }
