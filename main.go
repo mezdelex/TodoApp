@@ -8,6 +8,7 @@ import (
 	"todoapp.com/application/services"
 	"todoapp.com/infrastructure/connectors/postgre"
 	"todoapp.com/infrastructure/repositories"
+	"todoapp.com/presentation/controllers"
 )
 
 func main() {
@@ -22,7 +23,6 @@ func main() {
 	// services
 	todosService := services.NewTodosService(todosRepository)
 
-	// TODO: continue from here
 	// controllers
 	todosController := controllers.NewTodosController(todosService)
 
