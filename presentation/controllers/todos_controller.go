@@ -1,4 +1,5 @@
 package controllers
+> service
 
 import (
 	"strconv"
@@ -89,7 +90,7 @@ func (tc *TodosController) Update(context *fiber.Ctx) error {
 		return customErrors.Errors{}.HandleFiberError(todoToUpdate, context, error)
 	}
 
-	return context.Status(201).JSON(fiber.Map{
+	return context.Status(200).JSON(fiber.Map{
 		"data":    todoToUpdate,
 		"message": messages.Messages{}.ItemCreatedMessage(todoToUpdate),
 		"status":  messages.Status{}.Success(),
@@ -119,7 +120,7 @@ func (tc *TodosController) Delete(context *fiber.Ctx) error {
 		return customErrors.Errors{}.HandleFiberError(todoToDelete, context, error)
 	}
 
-	return context.Status(201).JSON(fiber.Map{
+	return context.Status(200).JSON(fiber.Map{
 		"data":    todoToDelete,
 		"message": messages.Messages{}.ItemDeletedSuccessfullyMessage("Todo", id),
 		"status":  messages.Status{}.Success(),
