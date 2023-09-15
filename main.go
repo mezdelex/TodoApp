@@ -2,8 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
-	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -14,13 +12,13 @@ import (
 )
 
 func main() {
-	db := postgre.Connect()
+	postgre.Connect()
 
 	app := fiber.New(fiber.Config{JSONEncoder: json.Marshal, JSONDecoder: json.Unmarshal})
 	api := app.Group("/api", logger.New())
 
 	// repositories
-	todosRepository := repositories.NewTodosRepository(db)
+	todosRepository := repositories.NewTodosRepository(postgre.DB)
 
 	// services
 	todosService := services.NewTodosService(todosRepository)
@@ -31,5 +29,5 @@ func main() {
 	// routes
 	todosController.Route(api)
 
-	app.Listen(fmt.Sprintf(":%s", os.Getenv("DB_PORT")))
+	app.Listen(":3000")
 }

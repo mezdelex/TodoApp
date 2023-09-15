@@ -19,7 +19,7 @@ func NewTodosRepository(db *gorm.DB) interfaces.TodosRepository {
 func (tr *todosRepositoryImpl) GetAll(context context.Context) []models.Todo {
 	todos := &[]models.Todo{}
 
-	tr.db.WithContext(context).Where("deleted_at is null").Find(todos)
+	tr.db.WithContext(context).Where("deleted_at is null").Find(&todos)
 
 	return *todos
 }

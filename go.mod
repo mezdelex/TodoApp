@@ -3,10 +3,11 @@ module todoapp.com
 go 1.21.1
 
 require (
-	github.com/DATA-DOG/go-sqlmock v1.5.0 // indirect
+	github.com/alicebob/gopher-json v0.0.0-20230218143504-906a9b012302 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gofiber/fiber/v2 v2.49.1 // indirect
+	github.com/gomodule/redigo v1.8.9 // indirect
 	github.com/google/uuid v1.3.1 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
@@ -25,6 +26,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.49.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
+	github.com/yuin/gopher-lua v1.1.0 // indirect
 	golang.org/x/crypto v0.8.0 // indirect
 	golang.org/x/sys v0.11.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
