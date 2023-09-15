@@ -1,5 +1,4 @@
 package controllers
-> service
 
 import (
 	"strconv"
