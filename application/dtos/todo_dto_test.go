@@ -21,7 +21,7 @@ func TestValidateUpdateAndDeleteShouldReturnFalseOnNilId(t *testing.T) {
 	assert.False(t, result)
 }
 
-func TestValidateCreateReturnFalseOnNonNilId(t *testing.T) {
+func TestValidateCreateShouldReturnFalseOnNonNilId(t *testing.T) {
 	// Arrange
 	id := uint(1)
 	todoDTO := TodoDTO{
@@ -38,7 +38,7 @@ func TestValidateCreateReturnFalseOnNonNilId(t *testing.T) {
 	assert.False(t, result)
 }
 
-func TestValidateReturnFalseIfNameIsNil(t *testing.T) {
+func TestValidateShouldReturnFalseIfNameIsNil(t *testing.T) {
 	// Arrange
 	todoDTO := TodoDTO{
 		Description: "Test description",
@@ -52,7 +52,7 @@ func TestValidateReturnFalseIfNameIsNil(t *testing.T) {
 	assert.False(t, result)
 }
 
-func TestValidateReturnFalseIfNameIsEmpty(t *testing.T) {
+func TestValidateShouldReturnFalseIfNameIsEmpty(t *testing.T) {
 	// Arrange
 	todoDTO := TodoDTO{
 		Name:        "",
@@ -67,7 +67,7 @@ func TestValidateReturnFalseIfNameIsEmpty(t *testing.T) {
 	assert.False(t, result)
 }
 
-func TestValidateReturnFalseIfDescriptionIsNil(t *testing.T) {
+func TestValidateShouldReturnFalseIfDescriptionIsNil(t *testing.T) {
 	// Arrange
 	todoDTO := TodoDTO{
 		Name:        "Test name",
@@ -81,7 +81,7 @@ func TestValidateReturnFalseIfDescriptionIsNil(t *testing.T) {
 	assert.False(t, result)
 }
 
-func TestValidateReturnFalseIfDescriptionIsEmpty(t *testing.T) {
+func TestValidateShouldReturnFalseIfDescriptionIsEmpty(t *testing.T) {
 	// Arrange
 	todoDTO := TodoDTO{
 		Name:        "Test name",
@@ -96,7 +96,7 @@ func TestValidateReturnFalseIfDescriptionIsEmpty(t *testing.T) {
 	assert.False(t, result)
 }
 
-func TestValidateReturnFalseIfIsCompletedIsNotFalse(t *testing.T) {
+func TestValidateShouldReturnFalseIfIsCompletedIsNotFalse(t *testing.T) {
 	// Arrange
 	todoDTO := TodoDTO{
 		Name:        "Test name",
@@ -109,4 +109,19 @@ func TestValidateReturnFalseIfIsCompletedIsNotFalse(t *testing.T) {
 
 	// Assert
 	assert.False(t, result)
+}
+
+func TestValidateShouldReturnTrueIfAllRequiredValuesArePresent(t *testing.T) {
+	// Arrange
+	todoDTO := TodoDTO{
+		Name:        "Test name",
+		Description: "Test description",
+		IsCompleted: false,
+	}
+
+	// Act
+	result := todoDTO.Validate()
+
+	// Assert
+	assert.True(t, result)
 }
