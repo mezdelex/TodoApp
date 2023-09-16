@@ -1,20 +1,19 @@
-package services
+package todos
 
 import (
 	"context"
 
-	"todoapp.com/application/dtos"
+	dtos "todoapp.com/application/dtos/todo"
 	"todoapp.com/application/errors"
-	servicesInterface "todoapp.com/application/services/interfaces"
-	"todoapp.com/domain/models"
-	repositoriesInterface "todoapp.com/infrastructure/repositories/interfaces"
+	"todoapp.com/domain/interfaces/todos"
+	models "todoapp.com/domain/models/todo"
 )
 
 type TodosServiceImpl struct {
-	todosRepository repositoriesInterface.TodosRepository
+	todosRepository todos.TodosRepository
 }
 
-func NewTodosService(todosRepository repositoriesInterface.TodosRepository) servicesInterface.TodosService {
+func NewTodosService(todosRepository todos.TodosRepository) todos.TodosService {
 	return &TodosServiceImpl{todosRepository: todosRepository}
 }
 

@@ -1,4 +1,4 @@
-package dtos
+package todo
 
 import (
 	"testing"
