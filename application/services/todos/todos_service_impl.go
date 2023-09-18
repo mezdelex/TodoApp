@@ -32,7 +32,7 @@ func (ts *TodosServiceImpl) GetAll(context context.Context) []dtos.TodoDTO {
 
 func (ts *TodosServiceImpl) Create(context context.Context, dto *dtos.TodoDTO) error {
 	if !dto.ValidateCreate() {
-		return errors.Errors.FiberValidationError(errors.Errors{}, "Todo")
+		return errors.Errors{}.FiberValidationError("Todo")
 	}
 
 	model := &models.Todo{}
@@ -46,7 +46,7 @@ func (ts *TodosServiceImpl) Create(context context.Context, dto *dtos.TodoDTO) e
 
 func (ts *TodosServiceImpl) Update(context context.Context, dto *dtos.TodoDTO) error {
 	if !dto.ValidateUpdateAndDelete() {
-		return errors.Errors.FiberValidationError(errors.Errors{}, "Todo")
+		return errors.Errors{}.FiberValidationError("Todo")
 	}
 
 	model := &models.Todo{}
@@ -57,7 +57,7 @@ func (ts *TodosServiceImpl) Update(context context.Context, dto *dtos.TodoDTO) e
 
 func (ts *TodosServiceImpl) Delete(context context.Context, dto *dtos.TodoDTO) error {
 	if !dto.ValidateUpdateAndDelete() {
-		return errors.Errors.FiberValidationError(errors.Errors{}, "Todo")
+		return errors.Errors{}.FiberValidationError("Todo")
 	}
 
 	model := &models.Todo{}
