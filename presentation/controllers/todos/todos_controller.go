@@ -1,12 +1,11 @@
-package controllers
-> service
+package todos
 
 import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
-	"todoapp.com/application/dtos"
-	"todoapp.com/application/services/interfaces"
+	"todoapp.com/application/dtos/todo"
+	interfaces "todoapp.com/domain/interfaces/todos"
 	customErrors "todoapp.com/presentation/errors"
 	"todoapp.com/presentation/messages"
 )
@@ -47,7 +46,7 @@ func (tc *TodosController) GetAll(context *fiber.Ctx) error {
 }
 
 func (tc *TodosController) Create(context *fiber.Ctx) error {
-	newTodo := &dtos.TodoDTO{}
+	newTodo := &todo.TodoDTO{}
 	error := context.BodyParser(newTodo)
 	if error != nil {
 		return context.Status(400).JSON(fiber.Map{
@@ -75,7 +74,7 @@ func (tc *TodosController) Update(context *fiber.Ctx) error {
 		return customErrors.Errors{}.RouteConversionError(context, "id")
 	}
 
-	todoToUpdate := &dtos.TodoDTO{}
+	todoToUpdate := &todo.TodoDTO{}
 	error = context.BodyParser(todoToUpdate)
 	if error != nil {
 		return customErrors.Errors{}.ParsingError(context, "Todo")
@@ -104,7 +103,7 @@ func (tc *TodosController) Delete(context *fiber.Ctx) error {
 		return customErrors.Errors{}.RouteConversionError(context, "id")
 	}
 
-	todoToDelete := &dtos.TodoDTO{}
+	todoToDelete := &todo.TodoDTO{}
 	error = context.BodyParser(todoToDelete)
 	if error != nil {
 		return customErrors.Errors{}.ParsingError(context, "Todo")

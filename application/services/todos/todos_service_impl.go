@@ -1,20 +1,19 @@
-package services
+package todos
 
 import (
 	"context"
 
-	"todoapp.com/application/dtos"
+	dtos "todoapp.com/application/dtos/todo"
 	"todoapp.com/application/errors"
-	servicesInterface "todoapp.com/application/services/interfaces"
-	"todoapp.com/domain/models"
-	repositoriesInterface "todoapp.com/infrastructure/repositories/interfaces"
+	"todoapp.com/domain/interfaces/todos"
+	models "todoapp.com/domain/models/todo"
 )
 
 type TodosServiceImpl struct {
-	todosRepository repositoriesInterface.TodosRepository
+	todosRepository todos.TodosRepository
 }
 
-func NewTodosService(todosRepository repositoriesInterface.TodosRepository) servicesInterface.TodosService {
+func NewTodosService(todosRepository todos.TodosRepository) todos.TodosService {
 	return &TodosServiceImpl{todosRepository: todosRepository}
 }
 
@@ -33,7 +32,7 @@ func (ts *TodosServiceImpl) GetAll(context context.Context) []dtos.TodoDTO {
 
 func (ts *TodosServiceImpl) Create(context context.Context, dto *dtos.TodoDTO) error {
 	if !dto.ValidateCreate() {
-		return errors.Errors.FiberValidationError(errors.Errors{}, "Todo")
+		return errors.Errors{}.FiberValidationError("Todo")
 	}
 
 	model := &models.Todo{}
@@ -47,7 +46,7 @@ func (ts *TodosServiceImpl) Create(context context.Context, dto *dtos.TodoDTO) e
 
 func (ts *TodosServiceImpl) Update(context context.Context, dto *dtos.TodoDTO) error {
 	if !dto.ValidateUpdateAndDelete() {
-		return errors.Errors.FiberValidationError(errors.Errors{}, "Todo")
+		return errors.Errors{}.FiberValidationError("Todo")
 	}
 
 	model := &models.Todo{}
@@ -58,7 +57,7 @@ func (ts *TodosServiceImpl) Update(context context.Context, dto *dtos.TodoDTO) e
 
 func (ts *TodosServiceImpl) Delete(context context.Context, dto *dtos.TodoDTO) error {
 	if !dto.ValidateUpdateAndDelete() {
-		return errors.Errors.FiberValidationError(errors.Errors{}, "Todo")
+		return errors.Errors{}.FiberValidationError("Todo")
 	}
 
 	model := &models.Todo{}
