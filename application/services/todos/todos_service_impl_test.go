@@ -36,15 +36,15 @@ func (m *MockedTodosRepository) Update(context context.Context, model *models.To
 	return args.Error(0)
 }
 
-// Just to implement TodosRepository interface
 func (m *MockedTodosRepository) Delete(context context.Context, model *models.Todo) error {
-	return nil
+	args := m.mock.Called(context, model)
+
+	return args.Error(0)
 }
 
+// Just to implement TodosRepository interface
 func (m *MockedTodosRepository) CleanUp(context context.Context) int64 {
-	m.mock.Called(context)
-
-	return 2
+	return 0
 }
 
 func TestGetAllShouldReturnTestTodoDTOs(t *testing.T) {
