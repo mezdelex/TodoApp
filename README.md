@@ -5,5 +5,6 @@ TodoApp API done with PostgreSQL + Go + Fiber + GORM
 
 Name|Repo
 -:|:-
-go-sqlmock|![uri](https://github.com/DATA-DOG/go-sqlmock)
-testify|![uri](https://github.com/stretchr/testify)
+dotenv|[uri](https://github.com/joho/godotenv)
+go-sqlmock|[uri](https://github.com/DATA-DOG/go-sqlmock)
+testify|[uri](https://github.com/stretchr/testify)
