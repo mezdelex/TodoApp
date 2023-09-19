@@ -9,12 +9,9 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"todoapp.com/domain/models/todo"
-	"todoapp.com/infrastructure/environments"
 )
 
 func Connect() *gorm.DB {
-	environments.LoadEnv()
-
 	port, _ := strconv.ParseUint(os.Getenv("DB_PORT"), 10, 32)
 	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		os.Getenv("DB_HOST"), port, os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"))

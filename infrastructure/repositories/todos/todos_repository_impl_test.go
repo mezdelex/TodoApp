@@ -8,6 +8,7 @@ import (
 	interfaces "todoapp.com/domain/interfaces/todos"
 	"todoapp.com/domain/models/todo"
 	"todoapp.com/infrastructure/connectors/postgre"
+	"todoapp.com/infrastructure/environments"
 )
 
 func TestCreateUpdateAndDeleteIntegration(t *testing.T) {
@@ -21,9 +22,13 @@ func TestCreateUpdateAndDeleteIntegration(t *testing.T) {
 	testContext := context.Background()
 
 	// Act
+	error := environments.LoadEnv()
+	if error != nil {
+		t.Skip()
+	}
 	db := postgre.Connect()
 	testTodosRepository := NewTodosRepository(db)
-	error := testTodosRepository.Create(testContext, todo)
+	error = testTodosRepository.Create(testContext, todo)
 	if error != nil {
 		assert.FailNow(t, "Test todo Creation failed.")
 	}

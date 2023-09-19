@@ -1,6 +1,6 @@
 module todoapp.com
 
-go 1.21.1
+go 1.21
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0 // indirect

@@ -10,7 +10,7 @@ import (
 
 const DefaultEnvPath = "/.env"
 
-func LoadEnv() {
+func LoadEnv() error {
 	_, f, _, ok := runtime.Caller(0)
 	if !ok {
 		log.Fatal("Error generating .env dir.")
@@ -18,7 +18,6 @@ func LoadEnv() {
 	dir := filepath.Join(filepath.Dir(f), "../..", DefaultEnvPath)
 
 	err := godotenv.Load(dir)
-	if err != nil {
-		log.Fatal("Error loading .env file.")
-	}
+
+	return err
 }
