@@ -2,7 +2,7 @@ name: Go
 
 on:
   push:
-    branches: [ "main", "18-add-ci" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
