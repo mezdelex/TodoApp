@@ -21,13 +21,13 @@ func (_ Errors) HandleFiberError(item interface{}, context *fiber.Ctx, error err
 }
 
 func (_ Errors) IdConflictError(context *fiber.Ctx, itemName string) error {
-	return context.Status(400).JSON(fiber.Map{"message": messages.Messages{}.IdConflictMessage(itemName), "status": messages.Status{}.Error()})
+	return context.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": messages.Messages{}.IdConflictMessage(itemName), "status": messages.Status{}.Error()})
 }
 
 func (_ Errors) ParsingError(context *fiber.Ctx, itemName string) error {
-	return context.Status(400).JSON(fiber.Map{"message": messages.Messages{}.ParsingErrorMessage(itemName), "status": messages.Status{}.Error()})
+	return context.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": messages.Messages{}.ParsingErrorMessage(itemName), "status": messages.Status{}.Error()})
 }
 
 func (_ Errors) RouteConversionError(context *fiber.Ctx, routeElement string) error {
-	return context.Status(400).JSON(fiber.Map{"message": messages.Messages{}.RouteFormatErrorMessage(routeElement), "status": messages.Status{}.Error()})
+	return context.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": messages.Messages{}.RouteFormatErrorMessage(routeElement), "status": messages.Status{}.Error()})
 }
