@@ -31,14 +31,14 @@ func (tc *TodosController) GetAll(context *fiber.Ctx) error {
 	todoDTOs := tc.todosService.GetAll(context.Context())
 
 	if len(todoDTOs) == 0 {
-		return context.Status(200).JSON(fiber.Map{
+		return context.Status(fiber.StatusOK).JSON(fiber.Map{
 			"data":    todoDTOs,
 			"message": messages.Messages{}.CollectionEmptyMessage("Todo"),
 			"status":  messages.Status{}.Success(),
 		})
 	}
 
-	return context.Status(200).JSON(fiber.Map{
+	return context.Status(fiber.StatusOK).JSON(fiber.Map{
 		"data":    todoDTOs,
 		"message": messages.Messages{}.ReturningItemsMessage(len(todoDTOs), "todo"),
 		"status":  messages.Status{}.Success(),
@@ -49,7 +49,7 @@ func (tc *TodosController) Create(context *fiber.Ctx) error {
 	newTodo := &todo.TodoDTO{}
 	error := context.BodyParser(newTodo)
 	if error != nil {
-		return context.Status(400).JSON(fiber.Map{
+		return context.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": messages.Messages{}.ParsingErrorMessage("Todo"),
 			"status":  messages.Status{}.Error(),
 		})
@@ -60,7 +60,7 @@ func (tc *TodosController) Create(context *fiber.Ctx) error {
 		return customErrors.Errors{}.HandleFiberError(newTodo, context, error)
 	}
 
-	return context.Status(201).JSON(fiber.Map{
+	return context.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"data":    newTodo,
 		"message": messages.Messages{}.ItemCreatedMessage(newTodo),
 		"status":  messages.Status{}.Success(),
@@ -89,7 +89,7 @@ func (tc *TodosController) Update(context *fiber.Ctx) error {
 		return customErrors.Errors{}.HandleFiberError(todoToUpdate, context, error)
 	}
 
-	return context.Status(200).JSON(fiber.Map{
+	return context.Status(fiber.StatusOK).JSON(fiber.Map{
 		"data":    todoToUpdate,
 		"message": messages.Messages{}.ItemCreatedMessage(todoToUpdate),
 		"status":  messages.Status{}.Success(),
@@ -119,7 +119,7 @@ func (tc *TodosController) Delete(context *fiber.Ctx) error {
 		return customErrors.Errors{}.HandleFiberError(todoToDelete, context, error)
 	}
 
-	return context.Status(200).JSON(fiber.Map{
+	return context.Status(fiber.StatusOK).JSON(fiber.Map{
 		"data":    todoToDelete,
 		"message": messages.Messages{}.ItemDeletedSuccessfullyMessage("Todo", id),
 		"status":  messages.Status{}.Success(),

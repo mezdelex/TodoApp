@@ -9,5 +9,5 @@ import (
 type Errors struct{}
 
 func (_ Errors) FiberValidationError(itemName string) error {
-	return fiber.NewError(400, fmt.Sprintf("Invalid %s.", itemName))
+	return fiber.NewError(fiber.StatusBadRequest, fmt.Sprintf("Invalid %s.", itemName))
 }
