@@ -6,39 +6,41 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTodoValidateUpdateAndDeleteShouldReturnFalseOnNilId(t *testing.T) {
+// TODO: if password check considers special characters, these should change too
+func TestUserValidateUpdateAndDeleteShouldReturnFalseOnNilId(t *testing.T) {
 	// Arrange
-	todoDTO := TodoDTO{
-		Name:        "Test name",
-		Description: "Test description",
-		IsCompleted: false,
+	userDTO := UserDTO{
+		Name:     "Test name",
+		Email:    "a@a.com",
+		Password: "aaaaaaaa",
 	}
 
 	// Act
-	result := todoDTO.ValidateUpdateAndDelete()
+	result := userDTO.ValidateUpdateAndDelete()
 
 	// Assert
 	assert.False(t, result)
 }
 
-func TestTodoValidateCreateShouldReturnFalseOnNonNilId(t *testing.T) {
+func TestUserValidateCreateShouldReturnFalseOnNonNilId(t *testing.T) {
 	// Arrange
 	id := uint(1)
-	todoDTO := TodoDTO{
-		ID:          &id,
-		Name:        "Test name",
-		Description: "Test description",
-		IsCompleted: false,
+	userDTO := UserDTO{
+		ID:       &id,
+		Name:     "Test name",
+		Email:    "a@a.com",
+		Password: "aaaaaaaa",
 	}
 
 	// Act
-	result := todoDTO.ValidateCreate()
+	result := userDTO.ValidateCreate()
 
 	// Assert
 	assert.False(t, result)
 }
 
-func TestTodoValidateShouldReturnFalseIfNameIsNil(t *testing.T) {
+// TODO: continue here
+func TestUserValidateShouldReturnFalseIfNameIsNil(t *testing.T) {
 	// Arrange
 	todoDTO := TodoDTO{
 		Description: "Test description",
@@ -52,7 +54,7 @@ func TestTodoValidateShouldReturnFalseIfNameIsNil(t *testing.T) {
 	assert.False(t, result)
 }
 
-func TestTodoValidateShouldReturnFalseIfNameIsEmpty(t *testing.T) {
+func TestUserValidateShouldReturnFalseIfNameIsEmpty(t *testing.T) {
 	// Arrange
 	todoDTO := TodoDTO{
 		Name:        "",
@@ -67,7 +69,7 @@ func TestTodoValidateShouldReturnFalseIfNameIsEmpty(t *testing.T) {
 	assert.False(t, result)
 }
 
-func TestTodoValidateShouldReturnFalseIfDescriptionIsNil(t *testing.T) {
+func TestUserValidateShouldReturnFalseIfDescriptionIsNil(t *testing.T) {
 	// Arrange
 	todoDTO := TodoDTO{
 		Name:        "Test name",
@@ -81,7 +83,7 @@ func TestTodoValidateShouldReturnFalseIfDescriptionIsNil(t *testing.T) {
 	assert.False(t, result)
 }
 
-func TestTodoValidateShouldReturnFalseIfDescriptionIsEmpty(t *testing.T) {
+func TestUserValidateShouldReturnFalseIfDescriptionIsEmpty(t *testing.T) {
 	// Arrange
 	todoDTO := TodoDTO{
 		Name:        "Test name",
@@ -96,7 +98,7 @@ func TestTodoValidateShouldReturnFalseIfDescriptionIsEmpty(t *testing.T) {
 	assert.False(t, result)
 }
 
-func TestTodoValidateShouldReturnFalseIfIsCompletedIsNotFalse(t *testing.T) {
+func TestUserValidateShouldReturnFalseIfIsCompletedIsNotFalse(t *testing.T) {
 	// Arrange
 	todoDTO := TodoDTO{
 		Name:        "Test name",
@@ -111,7 +113,7 @@ func TestTodoValidateShouldReturnFalseIfIsCompletedIsNotFalse(t *testing.T) {
 	assert.False(t, result)
 }
 
-func TestTodoValidateShouldReturnTrueIfAllRequiredValuesArePresent(t *testing.T) {
+func TestUserValidateShouldReturnTrueIfAllRequiredValuesArePresent(t *testing.T) {
 	// Arrange
 	todoDTO := TodoDTO{
 		Name:        "Test name",

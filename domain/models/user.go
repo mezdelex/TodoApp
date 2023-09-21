@@ -9,7 +9,7 @@ type User struct {
 	ID       *uint
 	Name     string
 	Email    string
-	Password bool
+	Password string
 
 	Todos []Todo
 }

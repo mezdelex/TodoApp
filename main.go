@@ -26,6 +26,7 @@ func main() {
 
 	// repositories
 	todosRepository := repositories.NewTodosRepository(db)
+	_ = repositories.NewUsersRepository(db)
 
 	// services
 	todosService := services.NewTodosService(todosRepository)
