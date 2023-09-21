@@ -1,6 +1,8 @@
-package todo
+package models
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Todo struct {
 	gorm.Model
@@ -8,4 +10,7 @@ type Todo struct {
 	Name        string
 	Description string
 	IsCompleted bool
+	UserId      *uint
+
+	User User
 }

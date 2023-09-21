@@ -1,19 +1,19 @@
-package todos
+package repositories
 
 import (
 	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	interfaces "todoapp.com/domain/interfaces/todos"
-	"todoapp.com/domain/models/todo"
-	"todoapp.com/infrastructure/connectors/postgre"
+	"todoapp.com/domain/interfaces"
+	"todoapp.com/domain/models"
+	"todoapp.com/infrastructure/connectors"
 	"todoapp.com/infrastructure/environments"
 )
 
 func TestCreateUpdateAndDeleteIntegration(t *testing.T) {
 	// Arrange
-	todo := &todo.Todo{
+	todo := &models.Todo{
 		ID:          nil,
 		Name:        "[test] name 1",
 		Description: "[test] description 1",
@@ -26,7 +26,7 @@ func TestCreateUpdateAndDeleteIntegration(t *testing.T) {
 	if error != nil {
 		t.Skip()
 	}
-	db := postgre.Connect()
+	db := connectors.Postgre{}.Connect()
 	testTodosRepository := NewTodosRepository(db)
 	error = testTodosRepository.Create(testContext, todo)
 	if error != nil {
@@ -38,7 +38,7 @@ func TestCreateUpdateAndDeleteIntegration(t *testing.T) {
 	testUpdate(t, todo, testContext, testTodosRepository)
 }
 
-func testUpdate(t *testing.T, todo *todo.Todo, testContext context.Context, testTodosRepository interfaces.TodosRepository) {
+func testUpdate(t *testing.T, todo *models.Todo, testContext context.Context, testTodosRepository interfaces.TodosRepository) {
 	// Arrange
 	todo.Name = "[test] name modified"
 
@@ -53,7 +53,7 @@ func testUpdate(t *testing.T, todo *todo.Todo, testContext context.Context, test
 	testDelete(t, todo, testContext, testTodosRepository)
 }
 
-func testDelete(t *testing.T, todo *todo.Todo, testContext context.Context, testTodosRepository interfaces.TodosRepository) {
+func testDelete(t *testing.T, todo *models.Todo, testContext context.Context, testTodosRepository interfaces.TodosRepository) {
 	// Arrange
 	// Act
 	error := testTodosRepository.Delete(testContext, todo)

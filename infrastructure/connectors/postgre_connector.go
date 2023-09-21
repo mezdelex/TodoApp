@@ -1,4 +1,4 @@
-package postgre
+package connectors
 
 import (
 	"fmt"
@@ -8,10 +8,12 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"todoapp.com/domain/models/todo"
+	"todoapp.com/domain/models"
 )
 
-func Connect() *gorm.DB {
+type Postgre struct{}
+
+func (_ Postgre) Connect() *gorm.DB {
 	port, _ := strconv.ParseUint(os.Getenv("DB_PORT"), 10, 32)
 	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		os.Getenv("DB_HOST"), port, os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"))
@@ -20,7 +22,7 @@ func Connect() *gorm.DB {
 	if err != nil {
 		log.Panic("Couldn't connect to the database.")
 	}
-	db.AutoMigrate(&todo.Todo{})
+	db.AutoMigrate(&models.Todo{}, &models.User{})
 
 	fmt.Println("Connected to the DB.")
 	return db

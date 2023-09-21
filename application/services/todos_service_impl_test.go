@@ -1,4 +1,4 @@
-package todos
+package services
 
 import (
 	"context"
@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	dtos "todoapp.com/application/dtos/todo"
-	models "todoapp.com/domain/models/todo"
+	"todoapp.com/application/dtos"
+	"todoapp.com/domain/models"
 )
 
 type MockedTodosRepository struct {
