@@ -26,16 +26,19 @@ func main() {
 
 	// repositories
 	todosRepository := repositories.NewTodosRepository(db)
-	_ = repositories.NewUsersRepository(db)
+	usersRepository := repositories.NewUsersRepository(db)
 
 	// services
 	todosService := services.NewTodosService(todosRepository)
+	usersService := services.NewUsersService(usersRepository)
 
 	// controllers
 	todosController := controllers.NewTodosController(todosService)
+	usersController := controllers.NewUsersController(usersService)
 
 	// routes
 	todosController.Route(api)
+	usersController.Route(api)
 
 	app.Listen(":3000")
 }

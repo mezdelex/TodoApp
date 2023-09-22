@@ -19,6 +19,7 @@ func (u *UserDTO) To(model *models.User) {
 	(*model).ID = (*u).ID
 	(*model).Name = (*u).Name
 	(*model).Email = (*u).Email
+	(*model).Password = (*u).Password
 }
 
 func (u *UserDTO) From(model *models.User) {

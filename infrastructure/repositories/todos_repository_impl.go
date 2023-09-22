@@ -38,5 +38,5 @@ func (tr *todosRepositoryImpl) Delete(context context.Context, todo *models.Todo
 
 // Integration tests only
 func (tr *todosRepositoryImpl) CleanUp(context context.Context) int64 {
-	return tr.db.Unscoped().WithContext(context).Where("name like ? or description like ?", "%[test]%", "%[test]%").Delete(&models.Todo{}).RowsAffected
+	return tr.db.Unscoped().WithContext(context).Where("name like ? or description like ?", "%[test]%", "%[test]%").Delete(&[]models.Todo{}).RowsAffected
 }

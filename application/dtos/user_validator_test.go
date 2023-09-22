@@ -24,7 +24,7 @@ func TestUserValidateUpdateAndDeleteShouldReturnFalseOnNilId(t *testing.T) {
 
 func TestUserValidateCreateShouldReturnFalseOnNonNilId(t *testing.T) {
 	// Arrange
-	id := uint(1)
+	var id uint = uint(1)
 	userDTO := UserDTO{
 		ID:       &id,
 		Name:     "Test name",
@@ -39,16 +39,15 @@ func TestUserValidateCreateShouldReturnFalseOnNonNilId(t *testing.T) {
 	assert.False(t, result)
 }
 
-// TODO: continue here
 func TestUserValidateShouldReturnFalseIfNameIsNil(t *testing.T) {
 	// Arrange
-	todoDTO := TodoDTO{
-		Description: "Test description",
-		IsCompleted: false,
+	userDTO := UserDTO{
+		Email:    "a@a.com",
+		Password: "aaaaaaaa",
 	}
 
 	// Act
-	result := todoDTO.Validate()
+	result := userDTO.Validate()
 
 	// Assert
 	assert.False(t, result)
@@ -56,58 +55,117 @@ func TestUserValidateShouldReturnFalseIfNameIsNil(t *testing.T) {
 
 func TestUserValidateShouldReturnFalseIfNameIsEmpty(t *testing.T) {
 	// Arrange
-	todoDTO := TodoDTO{
-		Name:        "",
-		Description: "Test description",
-		IsCompleted: false,
+	userDTO := UserDTO{
+		Name:     "",
+		Email:    "a@a.com",
+		Password: "aaaaaaaa",
 	}
 
 	// Act
-	result := todoDTO.Validate()
+	result := userDTO.Validate()
 
 	// Assert
 	assert.False(t, result)
 }
 
-func TestUserValidateShouldReturnFalseIfDescriptionIsNil(t *testing.T) {
+func TestUserValidateShouldReturnFalseIfEmailIsNil(t *testing.T) {
 	// Arrange
-	todoDTO := TodoDTO{
-		Name:        "Test name",
-		IsCompleted: false,
+	userDTO := UserDTO{
+		Name:     "Test name",
+		Password: "aaaaaaaa",
 	}
 
 	// Act
-	result := todoDTO.Validate()
+	result := userDTO.Validate()
 
 	// Assert
 	assert.False(t, result)
 }
 
-func TestUserValidateShouldReturnFalseIfDescriptionIsEmpty(t *testing.T) {
+func TestUserValidateShouldReturnFalseIfEmailIsEmpty(t *testing.T) {
 	// Arrange
-	todoDTO := TodoDTO{
-		Name:        "Test name",
-		Description: "",
-		IsCompleted: false,
+	userDTO := UserDTO{
+		Name:     "Test name",
+		Email:    "",
+		Password: "aaaaaaaa",
 	}
 
 	// Act
-	result := todoDTO.Validate()
+	result := userDTO.Validate()
 
 	// Assert
 	assert.False(t, result)
 }
 
-func TestUserValidateShouldReturnFalseIfIsCompletedIsNotFalse(t *testing.T) {
+func TestUserValidateShouldReturnFalseIfEmailIsMalformed(t *testing.T) {
 	// Arrange
-	todoDTO := TodoDTO{
-		Name:        "Test name",
-		Description: "Test description",
-		IsCompleted: true,
+	userDTO := UserDTO{
+		Name:     "Test name",
+		Email:    "a@.com",
+		Password: "aaaaaaaa",
 	}
 
 	// Act
-	result := todoDTO.Validate()
+	result := userDTO.Validate()
+
+	// Assert
+	assert.False(t, result)
+}
+
+func TestUserValidateShouldReturnFalseIfIsPasswordIsNil(t *testing.T) {
+	// Arrange
+	userDTO := UserDTO{
+		Name:  "Test name",
+		Email: "a@a.com",
+	}
+
+	// Act
+	result := userDTO.Validate()
+
+	// Assert
+	assert.False(t, result)
+}
+
+func TestUserValidateShouldReturnFalseIfIsPasswordIsEmpty(t *testing.T) {
+	// Arrange
+	userDTO := UserDTO{
+		Name:     "Test name",
+		Email:    "a@a.com",
+		Password: "",
+	}
+
+	// Act
+	result := userDTO.Validate()
+
+	// Assert
+	assert.False(t, result)
+}
+
+func TestUserValidateShouldReturnFalseIfIsPasswordIsShorterThanEightCharacters(t *testing.T) {
+	// Arrange
+	userDTO := UserDTO{
+		Name:     "Test name",
+		Email:    "a@a.com",
+		Password: "aaaa",
+	}
+
+	// Act
+	result := userDTO.Validate()
+
+	// Assert
+	assert.False(t, result)
+}
+
+func TestUserValidateShouldReturnFalseIfIsPasswordIsLongerThan16Characters(t *testing.T) {
+	// Arrange
+	userDTO := UserDTO{
+		Name:     "Test name",
+		Email:    "a@a.com",
+		Password: "aaaaaaaaaaaaaaaaa",
+	}
+
+	// Act
+	result := userDTO.Validate()
 
 	// Assert
 	assert.False(t, result)
@@ -115,14 +173,14 @@ func TestUserValidateShouldReturnFalseIfIsCompletedIsNotFalse(t *testing.T) {
 
 func TestUserValidateShouldReturnTrueIfAllRequiredValuesArePresent(t *testing.T) {
 	// Arrange
-	todoDTO := TodoDTO{
-		Name:        "Test name",
-		Description: "Test description",
-		IsCompleted: false,
+	userDTO := UserDTO{
+		Name:     "Test name",
+		Email:    "a@a.com",
+		Password: "aaaaaaaaaaa",
 	}
 
 	// Act
-	result := todoDTO.Validate()
+	result := userDTO.Validate()
 
 	// Assert
 	assert.True(t, result)
