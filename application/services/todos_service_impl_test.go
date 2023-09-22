@@ -1,4 +1,4 @@
-package todos
+package services
 
 import (
 	"context"
@@ -6,16 +6,13 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	dtos "todoapp.com/application/dtos/todo"
-	models "todoapp.com/domain/models/todo"
+	"todoapp.com/application/dtos"
+	"todoapp.com/domain/models"
 )
 
 type MockedTodosRepository struct {
 	mock mock.Mock
 }
-
-// Global Arrange
-var id1, id2 uint = uint(1), uint(2)
 
 func (m *MockedTodosRepository) GetAll(context context.Context) []models.Todo {
 	args := m.mock.Called(context)
@@ -24,6 +21,7 @@ func (m *MockedTodosRepository) GetAll(context context.Context) []models.Todo {
 }
 
 func (m *MockedTodosRepository) Create(context context.Context, model *models.Todo) error {
+	id1 := uint(1)
 	args := m.mock.Called(context, model)
 	model.ID = &id1
 
@@ -47,8 +45,9 @@ func (m *MockedTodosRepository) CleanUp(context context.Context) int64 {
 	return 0
 }
 
-func TestGetAllShouldReturnTestTodoDTOs(t *testing.T) {
+func TestTodosGetAllShouldReturnTestTodoDTOs(t *testing.T) {
 	// Arrange
+	id1, id2 := uint(1), uint(2)
 	testTodos := []models.Todo{
 		{
 			ID:          &id1,
@@ -89,8 +88,9 @@ func TestGetAllShouldReturnTestTodoDTOs(t *testing.T) {
 	assert.Equal(t, testTodoDTOs, result)
 }
 
-func TestCreateShouldReturnNoErrorOnCreateAndGeneratedId(t *testing.T) {
+func TestTodosCreateShouldReturnNoErrorOnCreateAndGeneratedId(t *testing.T) {
 	// Arrange
+	id1 := uint(1)
 	testTodo := &models.Todo{
 		Name:        "[test] name",
 		Description: "[test] description",
@@ -115,8 +115,9 @@ func TestCreateShouldReturnNoErrorOnCreateAndGeneratedId(t *testing.T) {
 	assert.Equal(t, (*testTodoDTO).ID, &id1)
 }
 
-func TestUpdateShouldReturnNoErrorOnUpdate(t *testing.T) {
+func TestTodosUpdateShouldReturnNoErrorOnUpdate(t *testing.T) {
 	// Arrange
+	id1 := uint(1)
 	testTodo := &models.Todo{
 		ID:          &id1,
 		Name:        "[test] name",
@@ -141,8 +142,9 @@ func TestUpdateShouldReturnNoErrorOnUpdate(t *testing.T) {
 	assert.Equal(t, error, nil)
 }
 
-func TestDeleteShouldReturnNoErrorOnDelete(t *testing.T) {
+func TestTodosDeleteShouldReturnNoErrorOnDelete(t *testing.T) {
 	// Arrange
+	id1 := uint(1)
 	testTodo := &models.Todo{
 		ID:          &id1,
 		Name:        "[test] name",

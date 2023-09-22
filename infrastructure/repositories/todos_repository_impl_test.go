@@ -1,19 +1,19 @@
-package todos
+package repositories
 
 import (
 	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	interfaces "todoapp.com/domain/interfaces/todos"
-	"todoapp.com/domain/models/todo"
-	"todoapp.com/infrastructure/connectors/postgre"
+	"todoapp.com/domain/interfaces"
+	"todoapp.com/domain/models"
+	"todoapp.com/infrastructure/connectors"
 	"todoapp.com/infrastructure/environments"
 )
 
-func TestCreateUpdateAndDeleteIntegration(t *testing.T) {
+func TestTodosCreateUpdateAndDeleteIntegration(t *testing.T) {
 	// Arrange
-	todo := &todo.Todo{
+	todo := &models.Todo{
 		ID:          nil,
 		Name:        "[test] name 1",
 		Description: "[test] description 1",
@@ -26,47 +26,47 @@ func TestCreateUpdateAndDeleteIntegration(t *testing.T) {
 	if error != nil {
 		t.Skip()
 	}
-	db := postgre.Connect()
+	db := connectors.Postgre{}.Connect()
 	testTodosRepository := NewTodosRepository(db)
 	error = testTodosRepository.Create(testContext, todo)
 	if error != nil {
-		assert.FailNow(t, "Test todo Creation failed.")
+		assert.FailNow(t, "Test Todo creation failed.")
 	}
 
 	// Assert
 	assert.NotNil(t, todo.ID)
-	testUpdate(t, todo, testContext, testTodosRepository)
+	testTodosUpdate(t, todo, testContext, testTodosRepository)
 }
 
-func testUpdate(t *testing.T, todo *todo.Todo, testContext context.Context, testTodosRepository interfaces.TodosRepository) {
+func testTodosUpdate(t *testing.T, todo *models.Todo, testContext context.Context, testTodosRepository interfaces.TodosRepository) {
 	// Arrange
 	todo.Name = "[test] name modified"
 
 	// Act
 	error := testTodosRepository.Update(testContext, todo)
 	if error != nil {
-		assert.FailNow(t, "Test todo Update failed.")
+		assert.FailNow(t, "Test Todo update failed.")
 	}
 
 	// Assert
 	assert.Nil(t, error)
-	testDelete(t, todo, testContext, testTodosRepository)
+	testTodosDelete(t, todo, testContext, testTodosRepository)
 }
 
-func testDelete(t *testing.T, todo *todo.Todo, testContext context.Context, testTodosRepository interfaces.TodosRepository) {
+func testTodosDelete(t *testing.T, todo *models.Todo, testContext context.Context, testTodosRepository interfaces.TodosRepository) {
 	// Arrange
 	// Act
 	error := testTodosRepository.Delete(testContext, todo)
 	if error != nil {
-		assert.FailNow(t, "Test todo Delete failed.")
+		assert.FailNow(t, "Test Todo delete failed.")
 	}
 
 	// Assert
 	assert.Nil(t, error)
-	testCleanUp(t, testContext, testTodosRepository)
+	testTodosCleanUp(t, testContext, testTodosRepository)
 }
 
-func testCleanUp(t *testing.T, testContext context.Context, testTodosRepository interfaces.TodosRepository) {
+func testTodosCleanUp(t *testing.T, testContext context.Context, testTodosRepository interfaces.TodosRepository) {
 	// Arrange
 	// Act
 	rowsAffected := testTodosRepository.CleanUp(testContext)

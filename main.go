@@ -6,11 +6,11 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	todosService "todoapp.com/application/services/todos"
-	"todoapp.com/infrastructure/connectors/postgre"
+	"todoapp.com/application/services"
+	"todoapp.com/infrastructure/connectors"
 	"todoapp.com/infrastructure/environments"
-	todosRepository "todoapp.com/infrastructure/repositories/todos"
-	todosController "todoapp.com/presentation/controllers/todos"
+	"todoapp.com/infrastructure/repositories"
+	"todoapp.com/presentation/controllers"
 )
 
 func main() {
@@ -19,22 +19,26 @@ func main() {
 		log.Fatal("Error loading .env file.")
 	}
 
-	db := postgre.Connect()
+	db := connectors.Postgre{}.Connect()
 
 	app := fiber.New(fiber.Config{JSONEncoder: json.Marshal, JSONDecoder: json.Unmarshal})
 	api := app.Group("/api", logger.New())
 
 	// repositories
-	todosRepository := todosRepository.NewTodosRepository(db)
+	todosRepository := repositories.NewTodosRepository(db)
+	usersRepository := repositories.NewUsersRepository(db)
 
 	// services
-	todosService := todosService.NewTodosService(todosRepository)
+	todosService := services.NewTodosService(todosRepository)
+	usersService := services.NewUsersService(usersRepository)
 
 	// controllers
-	todosController := todosController.NewTodosController(todosService)
+	todosController := controllers.NewTodosController(todosService)
+	usersController := controllers.NewUsersController(usersService)
 
 	// routes
 	todosController.Route(api)
+	usersController.Route(api)
 
 	app.Listen(":3000")
 }
