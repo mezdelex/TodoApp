@@ -112,7 +112,7 @@ func TestUserValidateShouldReturnFalseIfEmailIsMalformed(t *testing.T) {
 	assert.False(t, result)
 }
 
-func TestUserValidateShouldReturnFalseIfIsPasswordIsNil(t *testing.T) {
+func TestUserValidateShouldReturnFalseIfPasswordIsNil(t *testing.T) {
 	// Arrange
 	userDTO := UserDTO{
 		Name:  "Test name",
@@ -126,7 +126,7 @@ func TestUserValidateShouldReturnFalseIfIsPasswordIsNil(t *testing.T) {
 	assert.False(t, result)
 }
 
-func TestUserValidateShouldReturnFalseIfIsPasswordIsEmpty(t *testing.T) {
+func TestUserValidateShouldReturnFalseIfPasswordIsEmpty(t *testing.T) {
 	// Arrange
 	userDTO := UserDTO{
 		Name:     "Test name",
@@ -141,7 +141,7 @@ func TestUserValidateShouldReturnFalseIfIsPasswordIsEmpty(t *testing.T) {
 	assert.False(t, result)
 }
 
-func TestUserValidateShouldReturnFalseIfIsPasswordIsShorterThanEightCharacters(t *testing.T) {
+func TestUserValidateShouldReturnFalseIfPasswordIsShorterThanEightCharacters(t *testing.T) {
 	// Arrange
 	userDTO := UserDTO{
 		Name:     "Test name",
@@ -156,7 +156,7 @@ func TestUserValidateShouldReturnFalseIfIsPasswordIsShorterThanEightCharacters(t
 	assert.False(t, result)
 }
 
-func TestUserValidateShouldReturnFalseIfIsPasswordIsLongerThan16Characters(t *testing.T) {
+func TestUserValidateShouldReturnFalseIfPasswordIsLongerThanSixteenCharacters(t *testing.T) {
 	// Arrange
 	userDTO := UserDTO{
 		Name:     "Test name",

@@ -20,8 +20,14 @@ func (m *MockedUsersRepository) GetAll(context context.Context) []models.User {
 	return args.Get(0).([]models.User)
 }
 
-func (m *MockedUsersRepository) Get(context context.Context, id *uint) models.User {
+func (m *MockedUsersRepository) GetById(context context.Context, id *uint) models.User {
 	args := m.mock.Called(context, id)
+
+	return args.Get(0).(models.User)
+}
+
+func (m *MockedUsersRepository) GetByEmail(context context.Context, email string) models.User {
+	args := m.mock.Called(context, email)
 
 	return args.Get(0).(models.User)
 }
@@ -94,7 +100,7 @@ func TestUsersGetAllShouldReturnTestUserDTOs(t *testing.T) {
 	assert.Equal(t, testUserDTOs, result)
 }
 
-func TestUsersGetShouldReturnTestUserDTO(t *testing.T) {
+func TestUsersGetByIdShouldReturnTestUserDTO(t *testing.T) {
 	// Arrange
 	id1 := uint(1)
 	testUser := models.User{
@@ -111,11 +117,39 @@ func TestUsersGetShouldReturnTestUserDTO(t *testing.T) {
 	}
 	testContext := context.Background()
 	mockedUsersRepository := new(MockedUsersRepository)
-	mockedUsersRepository.mock.On("Get", testContext, &id1).Return(testUser)
+	mockedUsersRepository.mock.On("GetById", testContext, &id1).Return(testUser)
 
 	// Act
 	testUsersService := NewUsersService(mockedUsersRepository)
-	result := testUsersService.Get(testContext, &id1)
+	result := testUsersService.GetById(testContext, &id1)
+
+	// Assert
+	assert.Equal(t, testUserDTO, result)
+}
+
+func TestUsersGetByEmailShouldReturnTestUserDTO(t *testing.T) {
+	// Arrange
+	id1 := uint(1)
+	testEmail := "a@a.com"
+	testUser := models.User{
+		ID:       &id1,
+		Name:     "test name 1",
+		Email:    "a@a.com",
+		Password: "aaaaaaaa",
+	}
+	testUserDTO := dtos.UserDTO{
+		ID:       &id1,
+		Name:     "test name 1",
+		Email:    "a@a.com",
+		Password: "",
+	}
+	testContext := context.Background()
+	mockedUsersRepository := new(MockedUsersRepository)
+	mockedUsersRepository.mock.On("GetByEmail", testContext, &testEmail).Return(testUser)
+
+	// Act
+	testUsersService := NewUsersService(mockedUsersRepository)
+	result := testUsersService.GetByEmail(testContext, &testEmail)
 
 	// Assert
 	assert.Equal(t, testUserDTO, result)
@@ -172,7 +206,7 @@ func TestUsersUpdateShouldReturnNoErrorOnUpdate(t *testing.T) {
 	error := testUsersService.Update(testContext, testUserDTO)
 
 	// Assert
-	assert.Equal(t, error, nil)
+	assert.Nil(t, error)
 }
 
 func TestUsersDeleteShouldReturnNoErrorOnDelete(t *testing.T) {

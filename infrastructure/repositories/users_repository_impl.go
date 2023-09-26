@@ -24,10 +24,18 @@ func (ur *usersRepositoryImpl) GetAll(context context.Context) []models.User {
 	return *users
 }
 
-func (ur *usersRepositoryImpl) Get(context context.Context, id *uint) models.User {
+func (ur *usersRepositoryImpl) GetById(context context.Context, id *uint) models.User {
 	user := &models.User{}
 
 	ur.db.WithContext(context).Where("id = ? and deleted_at is null", (*id)).Find(&user)
+
+	return *user
+}
+
+func (ur *usersRepositoryImpl) GetByEmail(context context.Context, email *string) models.User {
+	user := &models.User{}
+
+	ur.db.WithContext(context).Where("email = ? and deleted_at is null", email).Find(&user)
 
 	return *user
 }

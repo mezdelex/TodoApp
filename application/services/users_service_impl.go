@@ -30,9 +30,18 @@ func (us *UsersServiceImpl) GetAll(context context.Context) []dtos.UserDTO {
 	return dtosSlice
 }
 
-func (us *UsersServiceImpl) Get(context context.Context, id *uint) dtos.UserDTO {
+func (us *UsersServiceImpl) GetById(context context.Context, id *uint) dtos.UserDTO {
 	dto := &dtos.UserDTO{}
-	entity := us.usersRepository.Get(context, id)
+	entity := us.usersRepository.GetById(context, id)
+
+	dto.From(&entity)
+
+	return (*dto)
+}
+
+func (us *UsersServiceImpl) GetByEmail(context context.Context, email *string) dtos.UserDTO {
+	dto := &dtos.UserDTO{}
+	entity := us.usersRepository.GetByEmail(context, email)
 
 	dto.From(&entity)
 

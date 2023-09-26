@@ -139,7 +139,7 @@ func TestTodosUpdateShouldReturnNoErrorOnUpdate(t *testing.T) {
 	error := testTodosService.Update(testContext, testTodoDTO)
 
 	// Assert
-	assert.Equal(t, error, nil)
+	assert.Nil(t, error)
 }
 
 func TestTodosDeleteShouldReturnNoErrorOnDelete(t *testing.T) {
