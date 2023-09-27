@@ -69,7 +69,7 @@ func testTodosDelete(t *testing.T, todo *models.Todo, testContext context.Contex
 func testTodosCleanUp(t *testing.T, testContext context.Context, testTodosRepository interfaces.TodosRepository) {
 	// Arrange
 	// Act
-	rowsAffected := testTodosRepository.CleanUp(testContext)
+	rowsAffected := testTodosRepository.(interfaces.ExtraTodosRepository).CleanUp(testContext)
 
 	// Assert
 	assert.NotZero(t, rowsAffected)

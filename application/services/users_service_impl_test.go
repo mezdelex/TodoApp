@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"todoapp.com/application/dtos"
+	"todoapp.com/domain/interfaces"
 	"todoapp.com/domain/models"
 )
 
@@ -26,7 +27,7 @@ func (m *MockedUsersRepository) GetById(context context.Context, id *uint) model
 	return args.Get(0).(models.User)
 }
 
-func (m *MockedUsersRepository) GetByEmail(context context.Context, email string) models.User {
+func (m *MockedUsersRepository) GetByEmail(context context.Context, email *string) models.User {
 	args := m.mock.Called(context, email)
 
 	return args.Get(0).(models.User)
@@ -52,10 +53,8 @@ func (m *MockedUsersRepository) Delete(context context.Context, model *models.Us
 	return args.Error(0)
 }
 
-// Just to implement UsersRepository interface
-func (m *MockedUsersRepository) CleanUp(context context.Context) int64 {
-	return 0
-}
+// TODO: Mock GenerateToken() method with GenerateKey: follow https://docs.gofiber.io/contrib/jwt/
+// needs to be ed25519
 
 func TestUsersGetAllShouldReturnTestUserDTOs(t *testing.T) {
 	// Arrange
@@ -93,6 +92,7 @@ func TestUsersGetAllShouldReturnTestUserDTOs(t *testing.T) {
 	mockedUsersRepository.mock.On("GetAll", testContext).Return(testUsers)
 
 	// Act
+	// TODO: add mocked test keys
 	testUsersService := NewUsersService(mockedUsersRepository)
 	result := testUsersService.GetAll(testContext)
 
@@ -120,6 +120,7 @@ func TestUsersGetByIdShouldReturnTestUserDTO(t *testing.T) {
 	mockedUsersRepository.mock.On("GetById", testContext, &id1).Return(testUser)
 
 	// Act
+	// TODO: add mocked test keys
 	testUsersService := NewUsersService(mockedUsersRepository)
 	result := testUsersService.GetById(testContext, &id1)
 
@@ -148,8 +149,9 @@ func TestUsersGetByEmailShouldReturnTestUserDTO(t *testing.T) {
 	mockedUsersRepository.mock.On("GetByEmail", testContext, &testEmail).Return(testUser)
 
 	// Act
+	// TODO: add mocked test keys
 	testUsersService := NewUsersService(mockedUsersRepository)
-	result := testUsersService.GetByEmail(testContext, &testEmail)
+	result := testUsersService.(interfaces.ExtraUsersService).GetByEmail(testContext, &testEmail)
 
 	// Assert
 	assert.Equal(t, testUserDTO, result)
@@ -173,6 +175,7 @@ func TestUsersCreateShouldReturnNoErrorOnCreateAndGeneratedId(t *testing.T) {
 	mockedUsersRepository.mock.On("Create", testContext, testUser).Return(nil)
 
 	// Act
+	// TODO: add mocked test keys
 	testUsersService := NewUsersService(mockedUsersRepository)
 	error := testUsersService.Create(testContext, testUserDTO)
 
@@ -202,6 +205,7 @@ func TestUsersUpdateShouldReturnNoErrorOnUpdate(t *testing.T) {
 	mockedUsersRepository.mock.On("Update", testContext, testUser).Return(nil)
 
 	// Act
+	// TODO: add mocked test keys
 	testUsersService := NewUsersService(mockedUsersRepository)
 	error := testUsersService.Update(testContext, testUserDTO)
 
@@ -229,6 +233,7 @@ func TestUsersDeleteShouldReturnNoErrorOnDelete(t *testing.T) {
 	mockedUsersRepository.mock.On("Delete", testContext, testUser).Return(nil)
 
 	// Act
+	// TODO: add mocked test keys
 	testUsersService := NewUsersService(mockedUsersRepository)
 	error := testUsersService.Delete(testContext, testUserDTO)
 

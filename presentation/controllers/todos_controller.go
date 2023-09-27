@@ -40,7 +40,7 @@ func (tc *TodosController) GetAll(context *fiber.Ctx) error {
 
 	return context.Status(fiber.StatusOK).JSON(fiber.Map{
 		"data":    todoDTOs,
-		"message": messages.Messages{}.ReturningItemsMessage(len(todoDTOs), "todo"),
+		"message": messages.Messages{}.ReturningItemsSuccessfullyMessage(len(todoDTOs), "todo"),
 		"status":  messages.Status{}.Success(),
 	})
 }
@@ -62,7 +62,7 @@ func (tc *TodosController) Create(context *fiber.Ctx) error {
 
 	return context.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"data":    newTodo,
-		"message": messages.Messages{}.ItemCreatedMessage(newTodo),
+		"message": messages.Messages{}.ItemCreatedSuccessfullyMessage(newTodo),
 		"status":  messages.Status{}.Success(),
 	})
 
@@ -91,7 +91,7 @@ func (tc *TodosController) Update(context *fiber.Ctx) error {
 
 	return context.Status(fiber.StatusOK).JSON(fiber.Map{
 		"data":    todoToUpdate,
-		"message": messages.Messages{}.ItemCreatedMessage(todoToUpdate),
+		"message": messages.Messages{}.ItemCreatedSuccessfullyMessage(todoToUpdate),
 		"status":  messages.Status{}.Success(),
 	})
 

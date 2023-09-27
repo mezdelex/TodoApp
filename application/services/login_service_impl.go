@@ -2,8 +2,13 @@ package services
 
 import (
 	"context"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
 	"os"
+	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"todoapp.com/application/dtos"
 	"todoapp.com/application/errors"
 	"todoapp.com/domain/interfaces"
@@ -22,34 +27,37 @@ func NewLoginService(userService interfaces.UsersService, config *models.Config)
 	}
 }
 
-// TODO: Pass config struct
 func (ls *LoginServiceImpl) Login(context context.Context, login *dtos.LoginDTO) error {
-	// Get user from DB
-	user := ls.userService.GetByEmail(context, &login.Email)
+	user := ls.userService.(interfaces.ExtraUsersService).GetByEmail(context, &login.Email)
+
 	if user.Password == "" {
 		return errors.Errors{}.ItemNotFoundError("User")
 	}
-
-	// Check password
 	if user.Password != (*login).Password {
 		return errors.Errors{}.IncorrectPasswordError()
 	}
 
-	// Generate bearer token
-	var error error
-	login.Token, error = ls.generateToken(&login.Password)
+	return ls.GenerateToken(login)
+}
+
+func (ls *LoginServiceImpl) GenerateToken(login *dtos.LoginDTO) error {
+	byteSlice, error := os.ReadFile(ls.config.PrivateKeyPath)
+	if error != nil {
+		return errors.Errors{}.CannotReadFileError("OPENSSH private key")
+	}
+	// TODO: test if this works; might require some trial and error
+	block, _ := pem.Decode(byteSlice)
+	parsedResult, _ := x509.ParsePKCS8PrivateKey(block.Bytes)
+	key := parsedResult.(*rsa.PrivateKey)
+
+	claims := jwt.MapClaims{
+		"email":      login.Email,
+		"expiration": time.Now().UTC().Add(time.Hour * 24).Unix(),
+	}
+	token := jwt.NewWithClaims(&jwt.SigningMethodEd25519{}, claims)
+
+	encodedToken, error := token.SignedString(key.N)
+	login.Token = &encodedToken
 
 	return error
-}
-
-func (ls *LoginServiceImpl) RefreshToken(context context.Context, login *dtos.LoginDTO) error {
-	// TODO: refresh token logic
-	return nil
-}
-
-func (ls *LoginServiceImpl) generateToken(passsword *string) (*string, error) {
-	// jwt workflow
-	os.Open("config.json")
-
-	return nil, nil
 }

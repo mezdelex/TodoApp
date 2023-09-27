@@ -44,16 +44,12 @@ func main() {
 	// controllers
 	todosController := controllers.NewTodosController(todosService)
 	usersController := controllers.NewUsersController(usersService)
-	// TODO: continue here
-	// TODO: continue here
-	// TODO: continue here
-	// TODO: continue here
-	// TODO: continue here; pending token generation flow
 	loginController := controllers.NewLoginController(loginService)
 
 	// routes
 	todosController.Route(api)
 	usersController.Route(api)
+	loginController.Route(api)
 
 	app.Listen(":3000")
 }

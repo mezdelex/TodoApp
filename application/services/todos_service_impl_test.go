@@ -40,11 +40,6 @@ func (m *MockedTodosRepository) Delete(context context.Context, model *models.To
 	return args.Error(0)
 }
 
-// Just to implement TodosRepository interface
-func (m *MockedTodosRepository) CleanUp(context context.Context) int64 {
-	return 0
-}
-
 func TestTodosGetAllShouldReturnTestTodoDTOs(t *testing.T) {
 	// Arrange
 	id1, id2 := uint(1), uint(2)

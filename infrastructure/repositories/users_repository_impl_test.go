@@ -69,7 +69,7 @@ func testUsersDelete(t *testing.T, user *models.User, testContext context.Contex
 func testUsersCleanUp(t *testing.T, testContext context.Context, testUsersRepository interfaces.UsersRepository) {
 	// Arrange
 	// Act
-	rowsAffected := testUsersRepository.CleanUp(testContext)
+	rowsAffected := testUsersRepository.(interfaces.ExtraUsersRepository).CleanUp(testContext)
 
 	// Assert
 	assert.NotZero(t, rowsAffected)

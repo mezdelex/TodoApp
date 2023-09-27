@@ -7,6 +7,6 @@ import (
 )
 
 type LoginService interface {
-	Login(context context.Context, login *dtos.LoginDTO)
-	RefreshToken()
+	Login(context context.Context, login *dtos.LoginDTO) error
+	GenerateToken(login *dtos.LoginDTO) error
 }

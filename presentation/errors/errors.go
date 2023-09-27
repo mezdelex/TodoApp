@@ -21,7 +21,7 @@ func (_ Errors) HandleFiberError(item interface{}, context *fiber.Ctx, error err
 }
 
 func (_ Errors) IdConflictError(context *fiber.Ctx, itemName string) error {
-	return context.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": messages.Messages{}.IdConflictMessage(itemName), "status": messages.Status{}.Error()})
+	return context.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": messages.Messages{}.IdConflictErrorMessage(itemName), "status": messages.Status{}.Error()})
 }
 
 func (_ Errors) ParsingError(context *fiber.Ctx, itemName string) error {

@@ -11,5 +11,8 @@ type TodosRepository interface {
 	Create(context context.Context, model *models.Todo) error
 	Update(context context.Context, model *models.Todo) error
 	Delete(context context.Context, model *models.Todo) error
+}
+
+type ExtraTodosRepository interface {
 	CleanUp(context context.Context) int64
 }

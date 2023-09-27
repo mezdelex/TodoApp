@@ -13,5 +13,8 @@ type UsersRepository interface {
 	Create(context context.Context, model *models.User) error
 	Update(context context.Context, model *models.User) error
 	Delete(context context.Context, model *models.User) error
+}
+
+type ExtraUsersRepository interface {
 	CleanUp(context context.Context) int64
 }

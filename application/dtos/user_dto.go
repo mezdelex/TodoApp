@@ -26,6 +26,7 @@ func (u *UserDTO) From(model *models.User) {
 	(*u).ID = (*model).ID
 	(*u).Name = (*model).Name
 	(*u).Email = (*model).Email
+	(*u).Password = (*model).Password
 }
 
 // Validator
