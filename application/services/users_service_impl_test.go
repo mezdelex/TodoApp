@@ -7,7 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"todoapp.com/application/dtos"
-	"todoapp.com/domain/interfaces"
 	"todoapp.com/domain/models"
 )
 
@@ -151,7 +150,7 @@ func TestUsersGetByEmailShouldReturnTestUserDTO(t *testing.T) {
 	// Act
 	// TODO: add mocked test keys
 	testUsersService := NewUsersService(mockedUsersRepository)
-	result := testUsersService.(interfaces.ExtraUsersService).GetByEmail(testContext, &testEmail)
+	result := testUsersService.GetByEmail(testContext, &testEmail)
 
 	// Assert
 	assert.Equal(t, testUserDTO, result)

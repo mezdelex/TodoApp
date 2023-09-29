@@ -10,10 +10,10 @@ import (
 )
 
 type UsersServiceImpl struct {
-	usersRepository interfaces.UsersRepository
+	usersRepository interfaces.BaseUsersRepositoryWithEmail
 }
 
-func NewUsersService(usersRepository interfaces.UsersRepository) interfaces.UsersService {
+func NewUsersService(usersRepository interfaces.BaseUsersRepositoryWithEmail) *UsersServiceImpl {
 	return &UsersServiceImpl{usersRepository: usersRepository}
 }
 

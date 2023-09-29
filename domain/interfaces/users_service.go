@@ -6,14 +6,21 @@ import (
 	"todoapp.com/application/dtos"
 )
 
-type UsersService interface {
-	GetAll(context context.Context) []dtos.UserDTO
-	GetById(context context.Context, id *uint) dtos.UserDTO
-	Create(context context.Context, dto *dtos.UserDTO) error
-	Update(context context.Context, dto *dtos.UserDTO) error
-	Delete(context context.Context, dto *dtos.UserDTO) error
-}
+type (
+	UsersService interface {
+		BaseUsersService
+		UsersServiceEmail
+	}
 
-type ExtraUsersService interface {
-	GetByEmail(context context.Context, email *string) dtos.UserDTO
-}
+	BaseUsersService interface {
+		GetAll(context context.Context) []dtos.UserDTO
+		GetById(context context.Context, id *uint) dtos.UserDTO
+		Create(context context.Context, dto *dtos.UserDTO) error
+		Update(context context.Context, dto *dtos.UserDTO) error
+		Delete(context context.Context, dto *dtos.UserDTO) error
+	}
+
+	UsersServiceEmail interface {
+		GetByEmail(context context.Context, email *string) dtos.UserDTO
+	}
+)

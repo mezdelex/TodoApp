@@ -38,6 +38,10 @@ func TestLoginLoginShouldReturnErrorIfGivenPasswordDoesNotMatch(t *testing.T) {
 	MockedUsersService.mock.On("GetByEmail", testContext, &testEmail).Return(testUserDTO)
 
 	// Act
+	// TODO: Continue here
+	// TODO: Continue here
+	// TODO: Continue here
+	// TODO: Continue here
 	// TODO: mock config and GenerateToken
 	// TODO: mock config and GenerateToken
 	// TODO: mock config and GenerateToken

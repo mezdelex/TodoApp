@@ -6,13 +6,20 @@ import (
 	"todoapp.com/domain/models"
 )
 
-type TodosRepository interface {
-	GetAll(context context.Context) []models.Todo
-	Create(context context.Context, model *models.Todo) error
-	Update(context context.Context, model *models.Todo) error
-	Delete(context context.Context, model *models.Todo) error
-}
+type (
+	TodosRepository interface {
+		BaseTodosRepository
+		TodosRepositoryCleanUp
+	}
 
-type ExtraTodosRepository interface {
-	CleanUp(context context.Context) int64
-}
+	BaseTodosRepository interface {
+		GetAll(context context.Context) []models.Todo
+		Create(context context.Context, model *models.Todo) error
+		Update(context context.Context, model *models.Todo) error
+		Delete(context context.Context, model *models.Todo) error
+	}
+
+	TodosRepositoryCleanUp interface {
+		CleanUp(context context.Context) int64
+	}
+)

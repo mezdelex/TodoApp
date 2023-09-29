@@ -10,10 +10,10 @@ import (
 )
 
 type TodosServiceImpl struct {
-	todosRepository interfaces.TodosRepository
+	todosRepository interfaces.BaseTodosRepository
 }
 
-func NewTodosService(todosRepository interfaces.TodosRepository) interfaces.TodosService {
+func NewTodosService(todosRepository interfaces.BaseTodosRepository) *TodosServiceImpl {
 	return &TodosServiceImpl{todosRepository: todosRepository}
 }
 

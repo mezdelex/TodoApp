@@ -28,7 +28,7 @@ func NewLoginService(userService interfaces.UsersService, config *models.Config)
 }
 
 func (ls *LoginServiceImpl) Login(context context.Context, login *dtos.LoginDTO) error {
-	user := ls.userService.(interfaces.ExtraUsersService).GetByEmail(context, &login.Email)
+	user := ls.userService.GetByEmail(context, &login.Email)
 
 	if user.Password == "" {
 		return errors.Errors{}.ItemNotFoundError("User")
