@@ -41,7 +41,7 @@ func (uc *UsersController) GetAll(context *fiber.Ctx) error {
 
 	return context.Status(fiber.StatusOK).JSON(fiber.Map{
 		"data":    userDTOs,
-		"message": messages.Messages{}.ReturningItemsMessage(len(userDTOs), "user"),
+		"message": messages.Messages{}.ReturningItemsSuccessfullyMessage(len(userDTOs), "user"),
 		"status":  messages.Status{}.Success(),
 	})
 }
@@ -53,11 +53,11 @@ func (uc *UsersController) Get(context *fiber.Ctx) error {
 	}
 
 	id := uint(i)
-	userDTO := uc.usersService.Get(context.Context(), &id)
+	userDTO := uc.usersService.GetById(context.Context(), &id)
 
 	return context.Status(fiber.StatusOK).JSON(fiber.Map{
 		"data":    userDTO,
-		"message": messages.Messages{}.ReturningItemsMessage(1, "user"),
+		"message": messages.Messages{}.ReturningItemsSuccessfullyMessage(1, "user"),
 		"status":  messages.Status{}.Success(),
 	})
 }
@@ -79,7 +79,7 @@ func (uc *UsersController) Create(context *fiber.Ctx) error {
 
 	return context.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"data":    newUser,
-		"message": messages.Messages{}.ItemCreatedMessage(newUser),
+		"message": messages.Messages{}.ItemCreatedSuccessfullyMessage(newUser),
 		"status":  messages.Status{}.Success(),
 	})
 
@@ -108,7 +108,7 @@ func (uc *UsersController) Update(context *fiber.Ctx) error {
 
 	return context.Status(fiber.StatusOK).JSON(fiber.Map{
 		"data":    userToUpdate,
-		"message": messages.Messages{}.ItemCreatedMessage(userToUpdate),
+		"message": messages.Messages{}.ItemCreatedSuccessfullyMessage(userToUpdate),
 		"status":  messages.Status{}.Success(),
 	})
 

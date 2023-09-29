@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"gorm.io/gorm"
-	"todoapp.com/domain/interfaces"
 	"todoapp.com/domain/models"
 )
 
@@ -12,7 +11,7 @@ type todosRepositoryImpl struct {
 	db *gorm.DB
 }
 
-func NewTodosRepository(db *gorm.DB) interfaces.TodosRepository {
+func NewTodosRepository(db *gorm.DB) *todosRepositoryImpl {
 	return &todosRepositoryImpl{db: db}
 }
 

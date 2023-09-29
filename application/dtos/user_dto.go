@@ -37,7 +37,7 @@ func (dto *UserDTO) Validate() bool {
 	isOk, _ := regexp.MatchString(rfc2822EmailPattern, trimmedEmail)
 
 	// TODO: check password for certain special characters
-	if strings.TrimSpace((*dto).Name) == "" || trimmedEmail == "" || !isOk || len(trimmedPassword) < 8 || len(trimmedPassword) > 16 {
+	if strings.TrimSpace((*dto).Name) == "" || !isOk || len(trimmedPassword) < 8 || len(trimmedPassword) > 16 {
 		return false
 	}
 

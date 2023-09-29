@@ -7,6 +7,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"todoapp.com/application/services"
+	"todoapp.com/configuration"
+	"todoapp.com/domain/models"
 	"todoapp.com/infrastructure/connectors"
 	"todoapp.com/infrastructure/environments"
 	"todoapp.com/infrastructure/repositories"
@@ -17,6 +19,12 @@ func main() {
 	error := environments.LoadEnv()
 	if error != nil {
 		log.Fatal("Error loading .env file.")
+	}
+
+	var config models.Config
+	error = configuration.LoadCfg(&config)
+	if error != nil {
+		log.Fatal("Error decoding loaded configuration file.")
 	}
 
 	db := connectors.Postgre{}.Connect()
@@ -31,14 +39,17 @@ func main() {
 	// services
 	todosService := services.NewTodosService(todosRepository)
 	usersService := services.NewUsersService(usersRepository)
+	loginService := services.NewLoginService(usersRepository, &config)
 
 	// controllers
 	todosController := controllers.NewTodosController(todosService)
 	usersController := controllers.NewUsersController(usersService)
+	loginController := controllers.NewLoginController(loginService)
 
 	// routes
 	todosController.Route(api)
 	usersController.Route(api)
+	loginController.Route(api)
 
 	app.Listen(":3000")
 }
