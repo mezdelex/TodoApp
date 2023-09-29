@@ -1,6 +1,4 @@
 {
-    "ed25519": {
-        "private": "C:/Users/alexc/.ssh/id_ed25519",
-        "public": "C:/Users/alexc/.ssh/id_ed25519.pub"
-    }
+    "rsa_private": "C:/Users/alexc/.ssh/id_rsa",
+    "rsa_public": "C:/Users/alexc/.ssh/id_rsa.pub"
 }

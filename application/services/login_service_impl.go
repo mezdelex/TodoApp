@@ -2,9 +2,6 @@ package services
 
 import (
 	"context"
-	"crypto/ed25519"
-	"encoding/asn1"
-	"encoding/pem"
 	"fmt"
 	"os"
 	"time"
@@ -42,43 +39,23 @@ func (ls *LoginServiceImpl) Login(context context.Context, login *dtos.LoginDTO)
 }
 
 func (ls *LoginServiceImpl) GenerateToken(login *dtos.LoginDTO) error {
-	// byteSlice, error := os.ReadFile(ls.config.PrivateKeyPath)
-	// TODO: change this
-	raw, error := os.ReadFile("./mocks/id_ed25519")
+	fmt.Println(ls.config.PrivateKeyPath)
+	fmt.Println("Llego aquí")
+	encodedKey, error := os.ReadFile(ls.config.PrivateKeyPath)
 	if error != nil {
 		return errors.Errors{}.CannotReadFileError("OPENSSH private key")
 	}
 
-	block, _ := pem.Decode(raw)
-
-	// TODO: Extract to dtos?
-	type ed25519PrivKeyDTO struct {
-		ObjectIdentifier struct{ ObjectIdentifier asn1.ObjectIdentifier }
-		PrivateKey       []byte
-		Version          int
+	privateKey, error := jwt.ParseRSAPrivateKeyFromPEM(encodedKey)
+	if error != nil {
+		return errors.Errors{}.ItemNotParsedError("OPENSSH private key")
 	}
-
-	fmt.Println(block)
-
-	asn1PrivateKey := &ed25519PrivKeyDTO{}
-	// TODO: continue here
-	// TODO: continue here
-	// TODO: continue here
-	// TODO: continue here
-	// TODO: continue here
-	// This fails
-	something, error := asn1.Unmarshal(block.Bytes, asn1PrivateKey)
-	fmt.Println(something)
-	fmt.Println(asn1PrivateKey)
-	// 34 -> 32?
-	privateKey := ed25519.NewKeyFromSeed(asn1PrivateKey.PrivateKey[2:])
 
 	claims := jwt.MapClaims{
 		"email":      login.Email,
 		"expiration": time.Now().UTC().Add(time.Hour * 24).Unix(),
 	}
-	token := jwt.NewWithClaims(&jwt.SigningMethodEd25519{}, claims)
-	fmt.Println(token)
+	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 
 	signedToken, error := token.SignedString(privateKey)
 	login.Token = &signedToken

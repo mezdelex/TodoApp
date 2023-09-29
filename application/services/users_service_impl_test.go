@@ -23,11 +23,19 @@ func (m *MockedUsersRepository) GetAll(context context.Context) []models.User {
 func (m *MockedUsersRepository) GetById(context context.Context, id *uint) models.User {
 	args := m.mock.Called(context, id)
 
+	if *id != uint(1) {
+		return models.User{}
+	}
+
 	return args.Get(0).(models.User)
 }
 
 func (m *MockedUsersRepository) GetByEmail(context context.Context, email *string) models.User {
 	args := m.mock.Called(context, email)
+
+	if *email != "a@a.com" {
+		return models.User{}
+	}
 
 	return args.Get(0).(models.User)
 }

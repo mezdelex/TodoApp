@@ -5,30 +5,36 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"todoapp.com/application/dtos"
 	"todoapp.com/domain/models"
 )
 
-type MockedUsersService struct {
-	mock mock.Mock
-}
+func TestLoginGenerateTokenShouldReturnTokenAndNoError(t *testing.T) {
+	// Arrange
+	testLoginDTO := &dtos.LoginDTO{
+		Email:    "a@a.com",
+		Password: "aaaaaaaa",
+	}
+	testConfig := &models.Config{
+		PrivateKeyPath: "../../testing/id_rsa",
+		PublicKeyPath:  "../../testing/id_rsa.pub",
+	}
+	MockedUsersRepository := new(MockedUsersRepository)
 
-func (m *MockedUsersService) GetByEmail(context context.Context, email *string) dtos.UserDTO {
-	args := m.mock.Called(context, email)
+	// Act
+	testLoginService := NewLoginService(MockedUsersRepository, testConfig)
+	error := testLoginService.GenerateToken(testLoginDTO)
 
-	return args.Get(0).(dtos.UserDTO)
-}
-
-// TODO: test GenerateToken first
-func TestLoginGenerateTokenShouldReturnMockedTokenAndNoError(t *testing.T) {
-
+	// Assert
+	assert.Nil(t, error)
+	assert.NotNil(t, testLoginDTO.Token)
+	assert.NotEmpty(t, testLoginDTO.Token)
 }
 
 func TestLoginLoginShouldReturnErrorIfGivenPasswordDoesNotMatch(t *testing.T) {
 	// Arrange
 	id1 := uint(1)
-	testUserDTO := &dtos.UserDTO{
+	testUser := models.User{
 		ID:       &id1,
 		Name:     "test 1",
 		Email:    "a@a.com",
@@ -38,19 +44,76 @@ func TestLoginLoginShouldReturnErrorIfGivenPasswordDoesNotMatch(t *testing.T) {
 		Email:    "a@a.com",
 		Password: "bbbbb",
 	}
-	testEmail := "a@a.com"
 	testContext := context.Background()
-	MockedUsersService := new(MockedUsersService)
-	MockedUsersService.mock.On("GetByEmail", testContext, &testEmail).Return(testUserDTO)
+	MockedUserRepository := new(MockedUsersRepository)
+	MockedUserRepository.mock.On("GetByEmail", testContext, &testLoginDTO.Email).Return(testUser)
 	testConfig := &models.Config{
-		PrivateKeyPath: "./mocks/id_ed25519",
-		PublicKeyPath:  "./mocks/id_ed25519.pub",
+		PrivateKeyPath: "../../testing/id_rsa",
+		PublicKeyPath:  "../../testing/id_rsa.pub",
 	}
 
 	// Act
-	testLoginService := NewLoginService(MockedUsersService, testConfig)
+	testLoginService := NewLoginService(MockedUserRepository, testConfig)
 	error := testLoginService.Login(testContext, testLoginDTO)
 
 	// Assert
 	assert.NotNil(t, error)
+}
+
+func TestLoginLoginShouldReturnErrorIfUserIsNotFound(t *testing.T) {
+	// Arrange
+	id1 := uint(1)
+	testUser := models.User{
+		ID:       &id1,
+		Name:     "test 1",
+		Email:    "a@a.com",
+		Password: "aaaaaaaa",
+	}
+	testLoginDTO := &dtos.LoginDTO{
+		Email:    "b@b.com",
+		Password: "aaaaaaaa",
+	}
+	testContext := context.Background()
+	MockedUserRepository := new(MockedUsersRepository)
+	MockedUserRepository.mock.On("GetByEmail", testContext, &testLoginDTO.Email).Return(testUser)
+	testConfig := &models.Config{
+		PrivateKeyPath: "../../testing/id_rsa",
+		PublicKeyPath:  "../../testing/id_rsa.pub",
+	}
+
+	// Act
+	testLoginService := NewLoginService(MockedUserRepository, testConfig)
+	error := testLoginService.Login(testContext, testLoginDTO)
+
+	// Assert
+	assert.NotNil(t, error)
+}
+
+func TestLoginLoginShouldNotReturnAnyErrorsIfEverythingIsOk(t *testing.T) {
+	// Arrange
+	id1 := uint(1)
+	testUser := models.User{
+		ID:       &id1,
+		Name:     "test 1",
+		Email:    "a@a.com",
+		Password: "aaaaaaaa",
+	}
+	testLoginDTO := &dtos.LoginDTO{
+		Email:    "a@a.com",
+		Password: "aaaaaaaa",
+	}
+	testContext := context.Background()
+	MockedUserRepository := new(MockedUsersRepository)
+	MockedUserRepository.mock.On("GetByEmail", testContext, &testLoginDTO.Email).Return(testUser)
+	testConfig := &models.Config{
+		PrivateKeyPath: "../../testing/id_rsa",
+		PublicKeyPath:  "../../testing/id_rsa.pub",
+	}
+
+	// Act
+	testLoginService := NewLoginService(MockedUserRepository, testConfig)
+	error := testLoginService.Login(testContext, testLoginDTO)
+
+	// Assert
+	assert.Nil(t, error)
 }
