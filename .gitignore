@@ -23,5 +23,5 @@ go.work
 # Environment variables
 .env
 
-# .json
-.json
+# Config
+config.json

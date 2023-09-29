@@ -52,9 +52,6 @@ func (m *MockedUsersRepository) Delete(context context.Context, model *models.Us
 	return args.Error(0)
 }
 
-// TODO: Mock GenerateToken() method with GenerateKey: follow https://docs.gofiber.io/contrib/jwt/
-// needs to be ed25519
-
 func TestUsersGetAllShouldReturnTestUserDTOs(t *testing.T) {
 	// Arrange
 	id1, id2 := uint(1), uint(2)
@@ -91,7 +88,6 @@ func TestUsersGetAllShouldReturnTestUserDTOs(t *testing.T) {
 	mockedUsersRepository.mock.On("GetAll", testContext).Return(testUsers)
 
 	// Act
-	// TODO: add mocked test keys
 	testUsersService := NewUsersService(mockedUsersRepository)
 	result := testUsersService.GetAll(testContext)
 
@@ -119,7 +115,6 @@ func TestUsersGetByIdShouldReturnTestUserDTO(t *testing.T) {
 	mockedUsersRepository.mock.On("GetById", testContext, &id1).Return(testUser)
 
 	// Act
-	// TODO: add mocked test keys
 	testUsersService := NewUsersService(mockedUsersRepository)
 	result := testUsersService.GetById(testContext, &id1)
 
@@ -148,7 +143,6 @@ func TestUsersGetByEmailShouldReturnTestUserDTO(t *testing.T) {
 	mockedUsersRepository.mock.On("GetByEmail", testContext, &testEmail).Return(testUser)
 
 	// Act
-	// TODO: add mocked test keys
 	testUsersService := NewUsersService(mockedUsersRepository)
 	result := testUsersService.GetByEmail(testContext, &testEmail)
 
@@ -174,7 +168,6 @@ func TestUsersCreateShouldReturnNoErrorOnCreateAndGeneratedId(t *testing.T) {
 	mockedUsersRepository.mock.On("Create", testContext, testUser).Return(nil)
 
 	// Act
-	// TODO: add mocked test keys
 	testUsersService := NewUsersService(mockedUsersRepository)
 	error := testUsersService.Create(testContext, testUserDTO)
 
@@ -204,7 +197,6 @@ func TestUsersUpdateShouldReturnNoErrorOnUpdate(t *testing.T) {
 	mockedUsersRepository.mock.On("Update", testContext, testUser).Return(nil)
 
 	// Act
-	// TODO: add mocked test keys
 	testUsersService := NewUsersService(mockedUsersRepository)
 	error := testUsersService.Update(testContext, testUserDTO)
 
@@ -232,7 +224,6 @@ func TestUsersDeleteShouldReturnNoErrorOnDelete(t *testing.T) {
 	mockedUsersRepository.mock.On("Delete", testContext, testUser).Return(nil)
 
 	// Act
-	// TODO: add mocked test keys
 	testUsersService := NewUsersService(mockedUsersRepository)
 	error := testUsersService.Delete(testContext, testUserDTO)
 

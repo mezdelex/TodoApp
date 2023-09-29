@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"todoapp.com/application/dtos"
 	"todoapp.com/application/services"
 	"todoapp.com/configuration"
 	"todoapp.com/domain/models"
@@ -39,7 +40,9 @@ func main() {
 	// services
 	todosService := services.NewTodosService(todosRepository)
 	usersService := services.NewUsersService(usersRepository)
-	loginService := services.NewLoginService(usersService, &config)
+	loginService := services.NewLoginService(usersRepository, &config)
+	asdfad := dtos.LoginDTO{Email: "a@a.com"}
+	loginService.GenerateToken(&asdfad)
 
 	// controllers
 	todosController := controllers.NewTodosController(todosService)

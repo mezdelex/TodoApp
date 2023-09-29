@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"todoapp.com/application/dtos"
+	"todoapp.com/domain/models"
 )
 
 type MockedUsersService struct {
@@ -17,6 +18,11 @@ func (m *MockedUsersService) GetByEmail(context context.Context, email *string) 
 	args := m.mock.Called(context, email)
 
 	return args.Get(0).(dtos.UserDTO)
+}
+
+// TODO: test GenerateToken first
+func TestLoginGenerateTokenShouldReturnMockedTokenAndNoError(t *testing.T) {
+
 }
 
 func TestLoginLoginShouldReturnErrorIfGivenPasswordDoesNotMatch(t *testing.T) {
@@ -36,22 +42,15 @@ func TestLoginLoginShouldReturnErrorIfGivenPasswordDoesNotMatch(t *testing.T) {
 	testContext := context.Background()
 	MockedUsersService := new(MockedUsersService)
 	MockedUsersService.mock.On("GetByEmail", testContext, &testEmail).Return(testUserDTO)
+	testConfig := &models.Config{
+		PrivateKeyPath: "./mocks/id_ed25519",
+		PublicKeyPath:  "./mocks/id_ed25519.pub",
+	}
 
 	// Act
-	// TODO: Continue here
-	// TODO: Continue here
-	// TODO: Continue here
-	// TODO: Continue here
-	// TODO: mock config and GenerateToken
-	// TODO: mock config and GenerateToken
-	// TODO: mock config and GenerateToken
-	// TODO: mock config and GenerateToken
-	// TODO: mock config and GenerateToken
-	testLoginService := NewLoginService(MockedUsersService)
+	testLoginService := NewLoginService(MockedUsersService, testConfig)
 	error := testLoginService.Login(testContext, testLoginDTO)
 
 	// Assert
 	assert.NotNil(t, error)
 }
-
-// User and Login service test can share mocked GenerateToken defined here since they share package.
