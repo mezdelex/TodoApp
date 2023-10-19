@@ -2,7 +2,6 @@ package configuration
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 
@@ -15,9 +14,5 @@ func LoadCfg(config *models.Config) error {
 		log.Fatal("Configuration could not be loaded.")
 	}
 
-	error = json.Unmarshal(configFile, config)
-	fmt.Println("Estoy en la config")
-	fmt.Println(config)
-
-	return error
+	return json.Unmarshal(configFile, config)
 }

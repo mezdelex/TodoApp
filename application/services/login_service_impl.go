@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"time"
 
@@ -39,8 +38,6 @@ func (ls *LoginServiceImpl) Login(context context.Context, login *dtos.LoginDTO)
 }
 
 func (ls *LoginServiceImpl) GenerateToken(login *dtos.LoginDTO) error {
-	fmt.Println(ls.config.PrivateKeyPath)
-	fmt.Println("Llego aquí")
 	encodedKey, error := os.ReadFile(ls.config.PrivateKeyPath)
 	if error != nil {
 		return errors.Errors{}.CannotReadFileError("OPENSSH private key")
