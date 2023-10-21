@@ -1,11 +1,9 @@
 package controllers
 
 import (
-	// "fmt"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
-	// "github.com/golang-jwt/jwt/v5"
 	"todoapp.com/application/dtos"
 	"todoapp.com/domain/interfaces"
 	customErrors "todoapp.com/presentation/errors"
@@ -31,8 +29,6 @@ func (uc *UsersController) Route(router fiber.Router) {
 }
 
 func (uc *UsersController) GetAll(context *fiber.Ctx) error {
-	// fmt.Println(context.Locals("email"))
-
 	userDTOs := uc.usersService.GetAll(context.Context())
 
 	if len(userDTOs) == 0 {
